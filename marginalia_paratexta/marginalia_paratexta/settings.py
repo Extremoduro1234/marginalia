@@ -82,8 +82,8 @@ WSGI_APPLICATION = 'marginalia_paratexta.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config(default='postgres://postgres:alumnodb@localhost:5432/marginalia', conn_max_age=500)
+#DATABASES = {}
+#DATABASES['default'] = dj_database_url.config(default='postgres://postgres:alumnodb@localhost:5432/marginalia', conn_max_age=500)
 
 
 # Password validation
@@ -142,7 +142,16 @@ if 'DATABASE_URL' in os.environ:
         conn_max_age=500,
         conn_health_checks=True,
     )
-    
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backend.postgresql',
+        'NAME': 'railway',
+        'USER': 'postgres',
+        'PASSWORD': 'dAdc*BAFc*EaEGg51ae2gDe3GF4EfbE1',
+        'HOST': 'monorail.proxy.rlwy.net',
+        'PORT': '25454',
+    }
+}
 STORAGES = {
     # ...
     "staticfiles": {

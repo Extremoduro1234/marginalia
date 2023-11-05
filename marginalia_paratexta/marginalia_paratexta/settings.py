@@ -144,7 +144,7 @@ if 'DATABASE_URL' in os.environ:
     )
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backend.postgresql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'railway',
         'USER': 'postgres',
         'PASSWORD': 'dAdc*BAFc*EaEGg51ae2gDe3GF4EfbE1',

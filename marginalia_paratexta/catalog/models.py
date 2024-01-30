@@ -43,8 +43,8 @@ class Fandom(models.Model):
         Meme = "Meme"
         Parodia = "Parodia"
 
-    name = models.CharField('Nombre', max_length=200, null=True)
-    link = models.CharField('Link', max_length=200, null=True)
+    name = models.CharField('Nombre', max_length=200, blank=True, null=True)
+    link = models.CharField('Link', max_length=200, blank=True, null=True)
     type = models.CharField(
         max_length=10000,
         choices=FandomTypes.choices
@@ -99,10 +99,13 @@ class Creation(PolymorphicModel):
     #product = models.OneToOneField("Product", on_delete=models.CASCADE, related_name="product_creation")
     def __str__(self):
         return self.original_title
+    class Meta:
+        verbose_name = "Creación"
+        verbose_name_plural = "Creaciones"
 
 class OtherLanguageTitle(models.Model):
-    idioma = models.ForeignKey(Language, on_delete=models.CASCADE, null=True, related_name="language")
-    title = models.CharField('Título', max_length=10000, null=True)
+    idioma = models.ForeignKey(Language, on_delete=models.CASCADE, blank=True, related_name="language")
+    title = models.CharField('Título', max_length=10000, blank=True, null=True)
     creation = models.ForeignKey(Creation, on_delete=models.CASCADE, related_name="creation_other_language")
     def __str__(self):
         return self.title
@@ -162,7 +165,7 @@ class TVSerie(MediaCreation):
 
 class Videogame(MediaCreation):
     """Model representing a Videogame."""
-    batch_number = models.IntegerField("Número de entregas", null=True)
+    batch_number = models.IntegerField("Número de entregas", blank=True, null=True)
     development = models.TextField('Desarrollo',  null=True, blank=True)
     distribution = models.TextField('Distribución',  null=True, blank=True)
     design = models.TextField('Diseño',  null=True, blank=True)
@@ -173,8 +176,8 @@ class Videogame(MediaCreation):
 class Award(models.Model):
     """Model representing an award."""
     year = models.IntegerField("Año",default=2023, choices=((i,i) for i in range(1930, 2024)))
-    institution_name = models.CharField('Nombre de la institucion', max_length=10000, null=True)
-    text = models.CharField('Información del premio', max_length=10000, null=True)
+    institution_name = models.CharField('Nombre de la institucion', max_length=10000, blank=True, null=True)
+    text = models.CharField('Información del premio', max_length=10000, blank=True, null=True)
     creation = models.ForeignKey(Creation, on_delete=models.CASCADE, related_name="creation_award")
 
     def __str__(self):
@@ -186,7 +189,7 @@ class Award(models.Model):
 
 class Musica(Creation):
     """Model representing a Music Creation."""
-    idioma_original = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
+    idioma_original = models.ForeignKey(Language, on_delete=models.SET_NULL, blank=True, null=True)
     artist = models.CharField('Artista', max_length=10000, null=True, blank=True)
     album = models.CharField('Álbum', max_length=10000, null=True, blank=True)
     discography = models.CharField('Discográfica', max_length=10000, null=True, blank=True)
@@ -195,21 +198,21 @@ class Musica(Creation):
     mixing = models.CharField('Mezcla', max_length=10000, null=True, blank=True)
     remastering = models.CharField('Reedición', max_length=10000, null=True, blank=True)
     cover_design = models.CharField('Diseño de carátula', max_length=10000, null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Music"})
+    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Music"}, blank=True)
     class Meta:
         verbose_name_plural = "Music"
 
 
 class TheaterDebut(models.Model):
-    location = models.CharField('Lugar', max_length=10000)
+    location = models.CharField('Lugar', max_length=10000, blank=True, null=True)
     date = models.DateField('Fecha', null=True, blank=True)
     def __str__(self):
         return self.location
 
 class Theatre(Creation):
     """Model representing a Movie."""
-    idioma_original = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
-    estreno = models.OneToOneField(TheaterDebut, on_delete=models.SET_NULL, null=True)
+    idioma_original = models.ForeignKey(Language, on_delete=models.SET_NULL,blank=True, null=True)
+    estreno = models.OneToOneField(TheaterDebut, on_delete=models.SET_NULL, blank=True, null=True)
     stage_direction = models.TextField('Dirección escénica', null=True, blank=True)
     producer = models.TextField('Producción', null=True, blank=True)
     cast = models.TextField('Reparto', null=True, blank=True)
@@ -222,23 +225,23 @@ class Theatre(Creation):
     remake_link =  models.OneToOneField('Product', on_delete=models.SET_NULL, null=True, blank=True, name='Remake link', related_name="remake_theatre")
     repositions = models.TextField('Reposiciones',  null=True, blank=True)
     links = models.TextField('Links',  null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Theatre"})
+    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Theatre"}, blank=True)
 
     class Meta:
         verbose_name_plural = "Theatre"
 
 class Image(models.Model):
-    image = models.CharField('Link de la imagen', max_length=10000, null=True)
+    image = models.CharField('Link de la imagen', max_length=10000, blank=True, null=True)
     theatre = models.ForeignKey(Theatre, on_delete=models.CASCADE, related_name="theatre_images") 
     class Meta:
         verbose_name_plural = "Carteles y fotografías"
         verbose_name = "Cartel o fotografía"
 
 class Staging(models.Model):
-    artistic_direction = models.TextField('Dirección artística')
-    producer = models.TextField('Producción', )
-    cast = models.TextField('Reparto')    
-    location = models.CharField('Lugar', max_length=10000)
+    artistic_direction = models.TextField('Dirección artística',blank=True, null=True)
+    producer = models.TextField('Producción', blank=True, null=True)
+    cast = models.TextField('Reparto', blank=True, null=True)    
+    location = models.CharField('Lugar', max_length=10000, blank=True, null=True)
     theatre = models.ForeignKey(Theatre, on_delete=models.CASCADE, related_name="theatre_staging")
     def __str__(self):
         return self.producer 
@@ -256,7 +259,7 @@ class Editorial(models.Model):
 class Collection(models.Model):
     collection_name = models.CharField('Nombre de la colección', max_length=10000)
     year = models.IntegerField("Año",default=2023, choices=((i,i) for i in range(1930, 2024)))
-    editorial = models.ForeignKey(Editorial, on_delete=models.CASCADE, related_name="editorial_collection") 
+    editorial = models.ForeignKey(Editorial, on_delete=models.CASCADE, related_name="editorial_collection", blank=True, null=True) 
     def  __str__(self):
         return self.collection_name
     class Meta:
@@ -265,7 +268,7 @@ class Collection(models.Model):
 
 class OriginalEdition(models.Model):
     year = models.IntegerField("Año",default=2023, choices=((i,i) for i in range(1930, 2024)))
-    isbn = models.CharField('ISBN', max_length=10000)
+    isbn = models.CharField('ISBN', max_length=10000, blank=True, null=True)
     editorial = models.ForeignKey(Editorial, on_delete=models.CASCADE, related_name="editorial_original_edition") 
     def __str__(self):
         return "Year: " + str(self.year) + " " + self.editorial.name
@@ -279,12 +282,12 @@ class LibraryCreation(Creation):
 class Comic(LibraryCreation):
     script = models.TextField('Guión', null=True, blank=True)
     design = models.TextField('Diseño',  null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Comic"})
+    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Comic"}, blank=True)
     colecciones = models.ManyToManyField(Collection, related_name='collection_comic', blank=True)
 
 class Novel(LibraryCreation):
     autorship = models.CharField('Autoría', max_length=10000, null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Novel"})
+    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Novel"}, blank=True)
 
 class BoardGame(LibraryCreation):
     number_players =  models.IntegerField("Número de jugadores",default=2, choices=((i,i) for i in range(1, 16)))
@@ -293,14 +296,14 @@ class BoardGame(LibraryCreation):
     ilustrator = models.TextField('Ilustrador',  null=True, blank=True)
     developer = models.TextField('Desarrollador',  null=True, blank=True)
     design = models.TextField('Diseño',  null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Boardgame"})
+    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Boardgame"}, blank=True)
 
 class OtherLanguageEdition(models.Model):
     year = models.IntegerField("Año",default=2023, choices=((i,i) for i in range(1930, 2024)))
-    isbn = models.CharField('ISBN', max_length=10000)
+    isbn = models.CharField('ISBN', max_length=10000, blank=True, null=True)
     location = models.CharField('Lugar', max_length=10000, null=True, blank=True)
     traductor = models.CharField('Traductor', max_length=10000,  null=True, blank=True)
-    idioma = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="language_other_language_edition") 
+    idioma = models.ForeignKey(Language, on_delete=models.CASCADE, related_name="language_other_language_edition",blank=True, null=True) 
     libraryCreation = models.ForeignKey(LibraryCreation, on_delete=models.CASCADE, related_name="library_creation_other_language_edition") 
     editorial = models.ForeignKey(Editorial, on_delete=models.SET_NULL, related_name="editorial", null=True) 
     class Meta:
@@ -309,9 +312,9 @@ class OtherLanguageEdition(models.Model):
 
 class Reissue(models.Model):
     year = models.IntegerField("Año",default=2023, choices=((i,i) for i in range(1930, 2024)))
-    isbn = models.CharField('ISBN', max_length=10000)
+    isbn = models.CharField('ISBN', max_length=10000, blank=True, null=True)
     location = models.CharField('Lugar', max_length=10000,  null=True, blank=True)
-    editorial = models.ForeignKey(Editorial, on_delete=models.CASCADE, related_name="editorial_reissue") 
+    editorial = models.ForeignKey(Editorial, on_delete=models.CASCADE, related_name="editorial_reissue", blank=True, null=True) 
     traductor = models.CharField('Traductor', max_length=10000,  null=True, blank=True)
     libraryCreation = models.ForeignKey(LibraryCreation, on_delete=models.CASCADE, related_name="library_creation_reissue") 
     class Meta:
@@ -322,7 +325,7 @@ class Hipotext(models.Model):
     #fuentes_clasicas = models.ForeignKey(Reference, on_delete=models.CASCADE, related_name="hipotext_classic_sources") 
     #otras_fuentes = models.ManyToManyField(Reference, related_name="hipotext_other_sources")  # Cambiado a ManyToManyField
     #fuentes_documentales = models.ForeignKey(Reference, on_delete=models.CASCADE, related_name="hipotext_documentary_sources") 
-    unnecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)     
+    unnecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)   
     product = models.OneToOneField("Product", on_delete=models.CASCADE,related_name="product_hipotext")
     def __str__(self):
         return self.product.title
@@ -331,8 +334,8 @@ class Hipotext(models.Model):
         verbose_name = "Hipotexto"
 
 class ClassicSource(models.Model):
-    name = models.CharField('Nombre', max_length=10000)
-    title = models.CharField('Título', max_length=10000)
+    name = models.CharField('Nombre', max_length=10000, blank=True, null=True)
+    title = models.CharField('Título', max_length=10000, blank=True, null=True)
     reference = models.CharField('Referencia bibliográfica', max_length=10000,  null=True, blank=True)
     hipotext = models.ForeignKey(Hipotext, on_delete=models.CASCADE, related_name="hipotext_classic_sources") 
     class Meta:
@@ -342,8 +345,8 @@ class ClassicSource(models.Model):
         return self.name + " - " + self.title
 
 class OtherSource(models.Model):
-    name = models.CharField('Nombre', max_length=10000)
-    title = models.CharField('Título', max_length=10000)
+    name = models.CharField('Nombre', max_length=10000, blank=True, null=True)
+    title = models.CharField('Título', max_length=10000, blank=True, null=True)
     reference = models.CharField('Referencia bibliográfica', max_length=10000,  null=True, blank=True)
     hipotext = models.ForeignKey(Hipotext, on_delete=models.CASCADE, related_name="hipotext_other_sources") 
     class Meta:
@@ -353,8 +356,8 @@ class OtherSource(models.Model):
         return self.name + " - " + self.title
 
 class DocumentarySource(models.Model):
-    name = models.CharField('Nombre', max_length=10000)
-    title = models.CharField('Título', max_length=10000)
+    name = models.CharField('Nombre', max_length=10000, blank=True, null=True)
+    title = models.CharField('Título', max_length=10000, blank=True, null=True)
     reference = models.CharField('Referencia bibliográfica', max_length=10000,  null=True, blank=True)
     hipotext = models.ForeignKey(Hipotext, on_delete=models.CASCADE, related_name="hipotext_documentary_sources") 
     class Meta:
@@ -378,7 +381,7 @@ class Paratext(models.Model):
 class Rulebook(models.Model):
     image = models.CharField('Link de la imagen', max_length=10000, null=True, blank=True)
     paratext = models.ForeignKey(Paratext, on_delete=models.CASCADE, related_name="paratext_rulebook") 
-    description = models.TextField('Descripción')
+    description = models.TextField('Descripción', blank=True, null=True)
     class Meta:
         verbose_name_plural = "Libros de reglas"
         verbose_name = "Libro de reglas"
@@ -386,34 +389,34 @@ class Rulebook(models.Model):
 class Cover(models.Model):
     image = models.CharField('Link de la imagen', max_length=10000, null=True, blank=True)
     paratext = models.ForeignKey(Paratext, on_delete=models.CASCADE, related_name="paratext_cover") 
-    description = models.TextField('Descripción')
+    description = models.TextField('Descripción', blank=True, null=True)
     class Meta:
         verbose_name_plural = "Portadas"
         verbose_name = "Portada"
 
 class Videoclips(models.Model):
     image = models.CharField('Link de la imagen', max_length=10000, null=True, blank=True)
-    videoclip = models.CharField('Enlace al videoclip', max_length=10000)
+    videoclip = models.CharField('Enlace al videoclip', max_length=10000, blank=True, null=True)
     paratext = models.ForeignKey(Paratext, on_delete=models.CASCADE, related_name="paratext_videoclip") 
-    description = models.TextField('Descripción')
+    description = models.TextField('Descripción', blank=True, null=True)
     class Meta:
         verbose_name = "VideoClip"
         verbose_name_plural = "VideoClips"
 
 class AdsTrailers(models.Model):
     image = models.CharField('Link de la imagen', max_length=10000, null=True, blank=True)
-    videoclip = models.CharField('Video del trailer', max_length=10000)
+    videoclip = models.CharField('Video del trailer', max_length=10000, blank=True, null=True)
     paratext = models.ForeignKey(Paratext, on_delete=models.CASCADE, related_name="paratext_adstrailer") 
-    description = models.TextField('Descripción')
+    description = models.TextField('Descripción', blank=True, null=True)
     class Meta:
         verbose_name = "Anuncio o tráiler"
         verbose_name_plural = "Anuncios y tráileres"
 
 class Extras(models.Model):
     image = models.CharField('Link de la imagen', max_length=10000, null=True, blank=True)
-    videoclip = models.CharField('Video del trailer', max_length=10000)
+    videoclip = models.CharField('Video del trailer', max_length=10000, blank=True, null=True)
     paratext = models.ForeignKey(Paratext, on_delete=models.CASCADE, related_name="paratext_extras") 
-    description = models.TextField('Descripción')
+    description = models.TextField('Descripción', blank=True, null=True)
     class Meta:
         verbose_name = "Extra"
         verbose_name_plural = "Extras"
@@ -435,8 +438,8 @@ class Metatext(models.Model):
         verbose_name_plural = "Metatextos"
 
 class Declaration(models.Model):
-    description = models.CharField('Descripción', max_length=10000)
-    link = models.CharField('Link', max_length=10000)
+    description = models.CharField('Descripción', max_length=10000, blank=True, null=True)
+    link = models.CharField('Link', max_length=10000, blank=True, null=True)
     metatext = models.ForeignKey(Metatext, on_delete=models.CASCADE, related_name="metatext_declarations") 
     class Meta:
         verbose_name_plural = "Declaraciones autorizadas"
@@ -445,8 +448,8 @@ class Declaration(models.Model):
         return self.link
 
 class Criticism(models.Model):
-    description = models.CharField('Descripción', max_length=10000)
-    link = models.CharField('Link', max_length=10000)
+    description = models.CharField('Descripción', max_length=10000, blank=True, null=True)
+    link = models.CharField('Link', max_length=10000, blank=True, null=True)
     metatext = models.ForeignKey(Metatext, on_delete=models.CASCADE, related_name="metatext_criticism") 
     class Meta:
         verbose_name_plural = "Críticas"
@@ -455,8 +458,8 @@ class Criticism(models.Model):
         return self.link
 
 class PressArticle(models.Model):
-    description = models.CharField('Descripción', max_length=10000)
-    link = models.CharField('Link', max_length=10000)
+    description = models.CharField('Descripción', max_length=10000, blank=True, null=True)
+    link = models.CharField('Link', max_length=10000, blank=True, null=True)
     metatext = models.ForeignKey(Metatext, on_delete=models.CASCADE, related_name="metatext_press_article") 
     class Meta:
         verbose_name_plural = "Artículos de prensa"
@@ -465,8 +468,8 @@ class PressArticle(models.Model):
         return self.link
 
 class SocialNetwork(models.Model):
-    description = models.CharField('Descripción', max_length=10000)
-    link = models.CharField('Link', max_length=10000)
+    description = models.CharField('Descripción', max_length=10000,blank=True, null=True)
+    link = models.CharField('Link', max_length=10000, blank=True, null=True)
     metatext = models.ForeignKey(Metatext, on_delete=models.CASCADE, related_name="metatext_social_networks") 
     class Meta:
         verbose_name_plural = "Social Networks"
@@ -475,8 +478,8 @@ class SocialNetwork(models.Model):
         return self.link
 
 class Blog(models.Model):
-    description = models.CharField('Descripción', max_length=10000)
-    link = models.CharField('Link', max_length=10000)
+    description = models.CharField('Descripción', max_length=10000, blank=True, null=True)
+    link = models.CharField('Link', max_length=10000, blank=True, null=True)
     metatext = models.ForeignKey(Metatext, on_delete=models.CASCADE, related_name="metatext_blogs") 
     class Meta:
         verbose_name_plural = "Blogs"
@@ -508,7 +511,7 @@ class Bibliography(models.Model):
 class Product(models.Model):
     """Model representing a product."""
     id = models.UUIDField(primary_key = True, default=uuid.uuid4, unique=True, db_index=True, editable=False)
-    title = models.CharField('Titulo', max_length=10000)
+    title = models.CharField('Titulo', max_length=10000, blank=True, null=True)
     build_id = models.CharField('Autor/a de la ficha', max_length= 100, editable=False) #Esto tiene que hacerse con el id del que lo ha creado
     last_modified = models.DateField('Última modificación', editable=False, default=datetime.date.today)
     creation = models.OneToOneField(Creation, on_delete=models.CASCADE)

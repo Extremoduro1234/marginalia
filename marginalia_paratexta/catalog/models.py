@@ -322,7 +322,7 @@ class Hipotext(models.Model):
     #fuentes_clasicas = models.ForeignKey(Reference, on_delete=models.CASCADE, related_name="hipotext_classic_sources") 
     #otras_fuentes = models.ManyToManyField(Reference, related_name="hipotext_other_sources")  # Cambiado a ManyToManyField
     #fuentes_documentales = models.ForeignKey(Reference, on_delete=models.CASCADE, related_name="hipotext_documentary_sources") 
-    unnecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)     
+    innecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)     
     product = models.OneToOneField("Product", on_delete=models.CASCADE,related_name="product_hipotext")
     def __str__(self):
         return self.product.title
@@ -420,7 +420,7 @@ class Extras(models.Model):
 
 
 class Metatext(models.Model):
-    unnecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)    
+    innecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)    
     #declarations = models.TextField('Declaraciones autorizadas',  null=True, blank=True)
     #criticism = models.TextField('Críticas',  null=True, blank=True)
     #press_articles = models.TextField('Artículos de prensa',  null=True, blank=True)

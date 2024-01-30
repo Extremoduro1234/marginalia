@@ -11,21 +11,8 @@ from django.contrib.auth import get_user_model
 from treenode.models import TreeNodeModel
 
 class Genre(models.Model):
-    class Types(models.TextChoices):
-        Movie = "Movie"
-        TVSerie = "TVSerie"
-        Theatre = "Theatre"
-        Music = "Music"
-        Comic = "Comic"
-        Novel = "Novel"
-        Videogame = "Videogame"
-        BoardGame = "Boardgame"
 
     name = models.CharField('Nombre', max_length=200, null=True)
-    type = models.CharField(
-        max_length=10000,
-        choices=Types.choices
-    )
 
     def __str__(self):
         return self.name
@@ -140,7 +127,7 @@ class Movie(MediaCreation):
     earnings = models.IntegerField("Taquilla", null=True, blank=True)
     remake = models.TextField('Remake info', null=True, blank=True)
     remake_link =  models.OneToOneField('Product', on_delete=models.SET_NULL, blank=True, null=True, name='Remake link', related_name="remake_movie")
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Movie"})
+    genero = models.ManyToManyField(Genre)
 
 class TVSerie(MediaCreation):
     """Model representing a TVSerie."""
@@ -158,7 +145,7 @@ class TVSerie(MediaCreation):
     other_data = models.TextField('Otros datos', null=True, blank=True)
     remake = models.TextField('Remake info',  null=True, blank=True)
     remake_link =  models.OneToOneField('Product', on_delete=models.SET_NULL, null=True, blank=True, name='Remake link', related_name="remake_tvserie")
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "TVSerie"})
+    genero = models.ManyToManyField(Genre)
 
 class Videogame(MediaCreation):
     """Model representing a Videogame."""
@@ -168,7 +155,7 @@ class Videogame(MediaCreation):
     design = models.TextField('Diseño',  null=True, blank=True)
     plataforms = models.TextField('Plataformas',  null=True, blank=True)
     official_website = models.CharField('Web oficial', max_length=10000, null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Videogame"})
+    genero = models.ManyToManyField(Genre)
 
 class Award(models.Model):
     """Model representing an award."""
@@ -195,7 +182,7 @@ class Musica(Creation):
     mixing = models.CharField('Mezcla', max_length=10000, null=True, blank=True)
     remastering = models.CharField('Reedición', max_length=10000, null=True, blank=True)
     cover_design = models.CharField('Diseño de carátula', max_length=10000, null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Music"})
+    genero = models.ManyToManyField(Genre)
     class Meta:
         verbose_name_plural = "Music"
 
@@ -222,7 +209,7 @@ class Theatre(Creation):
     remake_link =  models.OneToOneField('Product', on_delete=models.SET_NULL, null=True, blank=True, name='Remake link', related_name="remake_theatre")
     repositions = models.TextField('Reposiciones',  null=True, blank=True)
     links = models.TextField('Links',  null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Theatre"})
+    genero = models.ManyToManyField(Genre)
 
     class Meta:
         verbose_name_plural = "Theatre"
@@ -279,12 +266,12 @@ class LibraryCreation(Creation):
 class Comic(LibraryCreation):
     script = models.TextField('Guión', null=True, blank=True)
     design = models.TextField('Diseño',  null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Comic"})
+    genero = models.ManyToManyField(Genre)
     colecciones = models.ManyToManyField(Collection, related_name='collection_comic', blank=True)
 
 class Novel(LibraryCreation):
     autorship = models.CharField('Autoría', max_length=10000, null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Novel"})
+    genero = models.ManyToManyField(Genre)
 
 class BoardGame(LibraryCreation):
     number_players =  models.IntegerField("Número de jugadores",default=2, choices=((i,i) for i in range(1, 16)))
@@ -293,7 +280,7 @@ class BoardGame(LibraryCreation):
     ilustrator = models.TextField('Ilustrador',  null=True, blank=True)
     developer = models.TextField('Desarrollador',  null=True, blank=True)
     design = models.TextField('Diseño',  null=True, blank=True)
-    genero = models.ManyToManyField(Genre, limit_choices_to={"type": "Boardgame"})
+    genero = models.ManyToManyField(Genre)
 
 class OtherLanguageEdition(models.Model):
     year = models.IntegerField("Año",default=2023, choices=((i,i) for i in range(1930, 2024)))
@@ -322,7 +309,7 @@ class Hipotext(models.Model):
     #fuentes_clasicas = models.ForeignKey(Reference, on_delete=models.CASCADE, related_name="hipotext_classic_sources") 
     #otras_fuentes = models.ManyToManyField(Reference, related_name="hipotext_other_sources")  # Cambiado a ManyToManyField
     #fuentes_documentales = models.ForeignKey(Reference, on_delete=models.CASCADE, related_name="hipotext_documentary_sources") 
-    innecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)     
+    unnecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)     
     product = models.OneToOneField("Product", on_delete=models.CASCADE,related_name="product_hipotext")
     def __str__(self):
         return self.product.title
@@ -420,7 +407,7 @@ class Extras(models.Model):
 
 
 class Metatext(models.Model):
-    innecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)    
+    unnecesary_field = models.CharField('Campo innecesario para funcionamiento', max_length=10000)    
     #declarations = models.TextField('Declaraciones autorizadas',  null=True, blank=True)
     #criticism = models.TextField('Críticas',  null=True, blank=True)
     #press_articles = models.TextField('Artículos de prensa',  null=True, blank=True)

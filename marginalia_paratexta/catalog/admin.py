@@ -175,7 +175,7 @@ class CreationAdmin(CreationParentAdmin, DisableAddButtonModelAdmin):
     def get_product_title(self, obj):
         return obj.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(MediaCreation)
 class MediaCreationAdmin(admin.ModelAdmin):
@@ -191,8 +191,8 @@ admin.site.unregister(LibraryCreation)
 
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
-    list_display = ('name', 'type')
-    list_filter = ('type', )
+    list_display = ('name', )
+    list_filter = ('name', )
 
 @admin.register(Movie)
 class MovieAdmin(HiddenModelAdmin, DisableAddButtonModelAdmin):
@@ -268,7 +268,7 @@ class ParatextAdmin(DisableAddButtonModelAdmin):
     def get_product_title(self, obj):
         return obj.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(Hipotext)
 class HipotextAdmin(DisableAddButtonModelAdmin):
@@ -277,7 +277,7 @@ class HipotextAdmin(DisableAddButtonModelAdmin):
     def get_product_title(self, obj):
         return obj.product.title  # Obtiene el título del producto asociado a la creación
     inlines = [ClassicSourceInline, DocumentarySourceInline, OtherSourceInline]
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(Metatext)
 class MetatextAdmin(DisableAddButtonModelAdmin):
@@ -286,7 +286,7 @@ class MetatextAdmin(DisableAddButtonModelAdmin):
     def get_product_title(self, obj):
         return obj.product.title  # Obtiene el título del producto asociado a la creación
     inlines = [DeclarationInline,CriticismInline,  PressArticleInline,  SocialNetworkInline, BlogInline, FandomInline]
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(MedialTransfers)
 class MedialTransfersAdmin(DisableAddButtonModelAdmin):
@@ -295,7 +295,7 @@ class MedialTransfersAdmin(DisableAddButtonModelAdmin):
     def get_product_title(self, obj):
         return obj.product_owner.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(Bibliography)
 class BibliographyAdmin(DisableAddButtonModelAdmin):
@@ -303,7 +303,7 @@ class BibliographyAdmin(DisableAddButtonModelAdmin):
     def get_product_title(self, obj):
         return obj.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
     readonly_fields = ('product','zotero_link', 'refworks_link')
 
     def zotero_link(self, obj):
@@ -335,7 +335,7 @@ class OtherLanguageTitleAdmin(admin.ModelAdmin):
     def get_product_title(self, obj):
         return obj.creation.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(Image)
 class ImageAdmin(admin.ModelAdmin):
@@ -344,7 +344,7 @@ class ImageAdmin(admin.ModelAdmin):
     def get_product_title(self, obj):
         return obj.theatre.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(OriginalEdition)
 class OriginalEditionAdmin(DisableAddButtonModelAdmin):
@@ -353,7 +353,7 @@ class OriginalEditionAdmin(DisableAddButtonModelAdmin):
     def get_product_title(self, obj):
         return obj.creation_original_edition.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
     def get_editorial_name(self, obj):
         return obj.editorial.name  # Obtiene el título del producto asociado a la creación
@@ -367,7 +367,7 @@ class OtherCountriesDebutAdmin(admin.ModelAdmin):
     def get_product_title(self, obj):
         return obj.creation.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(OtherLanguageEdition)
 class OtherLanguageEditionAdmin(admin.ModelAdmin):
@@ -376,7 +376,7 @@ class OtherLanguageEditionAdmin(admin.ModelAdmin):
     def get_product_title(self, obj):
         return obj.libraryCreation.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
     def get_editorial_name(self, obj):
         return obj.editorial.name  # Obtiene el título del producto asociado a la creación
@@ -395,7 +395,7 @@ class ReissueAdmin(admin.ModelAdmin):
     def get_product_title(self, obj):
         return obj.libraryCreation.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
     def get_editorial_name(self, obj):
         return obj.editorial.name  # Obtiene el título del producto asociado a la creación
@@ -409,7 +409,7 @@ class StagingAdmin(admin.ModelAdmin):
     def get_product_title(self, obj):
         return obj.theatre.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 class AwardYearFilter(admin.SimpleListFilter):
     title = 'Year Range'
@@ -446,7 +446,7 @@ class AwardAdmin(admin.ModelAdmin):
     def get_product_title(self, obj):
         return obj.creation.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(TheaterDebut)
 class TheaterDebutAdmin(HiddenModelAdmin):
@@ -455,7 +455,7 @@ class TheaterDebutAdmin(HiddenModelAdmin):
     def get_product_title(self, obj):
         return obj.theatre.product.title  # Obtiene el título del producto asociado a la creación
 
-    get_product_title.short_description = 'Product Title'  # Establece el nombre de la columna en el list_display
+    get_product_title.short_description = 'Título del producto'  # Establece el nombre de la columna en el list_display
 
 @admin.register(Collection)
 class CollectionAdmin(admin.ModelAdmin):
